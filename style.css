@@ -1,21 +1,59 @@
 body {
-    background-color: #FFFFEO; /* Warna kuning cerah */
-    font-family: Arial, sans-serif; /* Jenis huruf yang bersih dan mudah dibaca */
-   color: #191970 ; /*Warna teks utama (biru gelap) */
+  font-family: "Poppins", sans-serif;
+  background: linear-gradient(135deg, #6a11cb, #2575fc);
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
 }
 
 .kartu-profil {
-    width: 300px;
-    margin: 50px auto; /* 50px jarak atas/bawah, auto menengahkan kiri/kanan */
-    padding: 20px;
-    background-color: white;
-    border-radius: 15px; /* Membuat sudut menjadi melengkung */
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Efek bayangan */
-    text-alight: /* Menengahkan semua teks di dalam kartu */
+  background: rgba(255, 255, 255, 0.1);
+  padding: 30px;
+  border-radius: 15px;
+  text-align: center;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  width: 320px;
 }
 
-
 .kartu-profil img {
-   width: 250px;
-   border-radius: 50%; /* Trik untuk membuat gambar persegi menjadi lingkaran sempurna */
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid white;
+  margin-bottom: 10px;
+}
+
+.kartu-profil a {
+  color: #ffeb3b;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.kartu-profil a:hover {
+  text-decoration: underline;
+}
+
+button {
+  background-color: #ffeb3b;
+  color: #333;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 15px;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+button:hover {
+  background-color: #ffd600;
+}
+
+#output {
+  margin-top: 15px;
+  font-size: 1.1em;
 }
