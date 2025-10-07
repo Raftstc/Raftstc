@@ -1,4 +1,6 @@
 const tombolSapa = document.getElementById('sapaButton');
-tombolSapa.addEventListenener('click'.funcution(){
-alert('hallo terima kasih sudah berkunjung!');
+
+// PERBAIKAN: Perhatikan penulisan 'Listener'
+tombolSapa.addEventListener('click', function() {
+    alert('Halo, terima kasih sudah berkunjung,silahkan kembali lagi!');
 });
