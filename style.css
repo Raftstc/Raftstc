@@ -1,7 +1,7 @@
 body {
-  font-family: "Poppins", sans-serif;
-  background: linear-gradient(135deg, #6a11cb, #2575fc);
-  color: white;
+  font-family: "Segoe UI", sans-serif;
+  background-color: #f3f4f6; /* abu muda lembut */
+  color: #333;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -10,27 +10,45 @@ body {
 }
 
 .kartu-profil {
-  background: rgba(255, 255, 255, 0.1);
-  padding: 30px;
-  border-radius: 15px;
+  background: #fff;
+  padding: 24px;
+  border-radius: 12px;
   text-align: center;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   width: 320px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.kartu-profil:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
 }
 
 .kartu-profil img {
-  width: 120px;
-  height: 120px;
+  width: 110px;
+  height: 110px;
   border-radius: 50%;
   object-fit: cover;
-  border: 3px solid white;
-  margin-bottom: 10px;
+  border: 3px solid #ddd;
+  margin-bottom: 12px;
+}
+
+.kartu-profil h1 {
+  font-size: 1.4em;
+  margin: 10px 0 6px;
+}
+
+.kartu-profil p {
+  font-size: 0.95em;
+  color: #555;
+  margin-bottom: 14px;
+  line-height: 1.4;
 }
 
 .kartu-profil a {
-  color: #ffeb3b;
+  color: #2563eb; /* biru lembut */
   text-decoration: none;
-  font-weight: bold;
+  font-weight: 500;
 }
 
 .kartu-profil a:hover {
@@ -38,22 +56,23 @@ body {
 }
 
 button {
-  background-color: #ffeb3b;
-  color: #333;
+  background-color: #2563eb;
+  color: white;
   border: none;
-  padding: 10px 15px;
+  padding: 8px 14px;
   border-radius: 8px;
   cursor: pointer;
-  margin-top: 15px;
-  font-weight: bold;
-  transition: 0.3s;
+  margin-top: 10px;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
 }
 
 button:hover {
-  background-color: #ffd600;
+  background-color: #1e40af;
 }
 
 #output {
-  margin-top: 15px;
-  font-size: 1.1em;
+  margin-top: 12px;
+  font-size: 1em;
+  color: #444;
 }
