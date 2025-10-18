@@ -1,26 +1,82 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Profil Digital - Raftstc</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<title>Random Quotes Lucu & Bijak</title>
+<style>
+    body { font-family: Arial, sans-serif; background:#222; color:#fff; text-align:center; padding:20px; }
+    .box { background:#333; padding:20px; border-radius:10px; width:90%; max-width:500px; margin:auto; }
+    button { padding:10px 20px; background:#00aaff; border:none; color:white; cursor:pointer; font-size:16px; border-radius:5px; margin-top:10px; }
+    button:hover { background:#0088cc; }
+</style>
 </head>
 <body>
-  <div class="kartu-profil">
-    <img src="WIN_20251007_11_08_23_Pro.jpg" alt="Foto Profil Saya">
-    <h1>Muchamad Rafi</h1>
-    <p>Siswa SMK yang tertarik dengan teknologi dan desain. Selamat datang di website pertama saya!</p>
 
-    <!-- Link ke Instagram -->
-    <a href="https://www.instagram.com/raftstc_" target="_blank">Kunjungi Instagram Saya</a>
+<h1>😂 Random Quotes Lucu & Bijak 💡</h1>
 
-    <!-- Tombol untuk JavaScript -->
-    <button id="sapa-button">Klik Saya!</button>
-    <p id="output"></p>
-  </div>
+<div class="box">
+    <p id="quote">Klik tombol di bawah untuk mendapatkan kata-kata.</p>
+    <button onclick="tampilkanQuote()">🎲 Acak Quote</button>
+</div>
 
-  <!-- Menghubungkan ke file JavaScript -->
-  <script src="script.js"></script>
+<script>
+const quotes = [
+    "Hidup itu sederhana, yang bikin ribet itu pikiran sendiri.",
+    "Kalau gagal, coba lagi. Kalau masih gagal, berarti bukan jodohmu.",
+    "Belajar itu berat, tapi tidak belajar lebih berat lagi.",
+    "Orang sabar disayang Tuhan, tapi kalau kesabaran habis ya urusan manusia.",
+    "Jangan takut gagal. Gagal itu biasa, yang luar biasa itu kalau nggak nyoba.",
+    "Kesuksesan itu butuh proses. Kalau instan namanya mie.",
+    "Bahagia itu sederhana: tidur nyenyak, bangun gak kesiangan.",
+    "Fokuslah pada tujuanmu, kecuali ada promo gratis ongkir.",
+    "Jangan bandingkan dirimu dengan orang lain. Bandingkan aja harga mie sekarang sama dulu.",
+    "Kalau gagal, coba lagi. Kalau masih gagal, tidur dulu.",
+    "Bahagia itu sederhana: tidur nyenyak tanpa ingat tugas.",
+    "Aku tidak malas, aku hanya dalam mode hemat energi.",
+    "Bekerja keraslah, nanti bos kamu jadi makin kaya.",
+    "Jangan takut jelek. Yang penting bukan fotomu di KTP.",
+    "Olahraga paling berat adalah mengangkat beban kehidupan.",
+    "Aku sih ikhlas, meskipun ngeluh dulu.",
+    "Diet bisa besok, makan enak harus sekarang.",
+    "Cita-citaku sederhana: kaya tanpa kerja.",
+    "Kalau mimpi jadi kenyataan itu indah, tapi kalau tidur di kelas itu nyata.",
+    "Orang sabar disayang Tuhan, tapi kalau kebablasan disayang orang lain.",
+    "Diet itu gampang, yang susah itu konsisten nggak jajan siomay.",
+    "Bahagia itu sederhana, bisa tidur siang tanpa diganggu.",
+    "Cinta itu buta, tapi tetangga tetap bisa lihat kalau kamu lagi bucin.",
+    "Hidup itu kayak game, kadang naik level, kadang malah lag.",
+    "Belajar itu berat... makanya aku memilih rebahan.",
+    "Hidup itu simpel, yang ribet itu kalau pulsa habis pas mau OTP.",
+    "Jangan iri sama orang kaya. Bisa jadi dia juga iri sama tidur nyenyakmu.",
+    "Kalau rindu itu berat, kenapa timbangan nggak nambah?",
+    "Aku bukan pemalas, aku cuma sedang mode hemat energi.",
+    "Dompet sudah seperti bawang... dibuka bikin nangis.",
+    "Semangat boleh turun, tapi ingat... galon di rumah sudah kosong.",
+    "Makan boleh banyak, asal ingat... utang nasi padang belum dibayar.",
+    "Jika gagal, coba lagi. Jika masih gagal, tidur aja dulu.",
+    "Belajar keras hari ini, untuk tidur nyenyak besok.",
+    "Bekerja keraslah... karena saldo tidak akan bertambah sendiri.",
+    "Mimpi tidak akan tercapai kalau kamu kebanyakan rebahan. Tapi rebahan juga penting.",
+    "Kesuksesan berawal dari mimpi. Maka dari itu, aku tidur lagi.",
+    "Jangan terlalu baik sama orang. Nanti dikira Indomaret.",
+    "Orang sabar disayang Tuhan, tapi kalau kebanyakan sabar disayang semua orang.",
+    "Kalau hidupmu terasa berat, mungkin kamu kurang makan.",
+    "Masalah datang bukan untuk dijauhi, tapi untuk difoto dan dijadikan status.",
+    "Aku bukan malas, aku cuma sedang hemat energi.",
+    "Belajar dari lemper, dibungkus rapi tapi dalamnya ketan.",
+    "Jangan sedih kalau kamu jomblo, itu bukan salah kamu… salah yang gak mau sama kamu.",
+    "Kalau kamu merasa jelek, tenang… itu cuma perasaan. Faktanya? Ya begitu.",
+    "Cinta itu kayak kentut, kalau dipaksa pasti berak.",
+    "Masalah jangan dibesar-besarkan… kecuali kalau mau masuk TV.",
+    "Bangun pagi itu berat, yang ringan cuma mata saat merem.",
+    "Kalau hatimu kosong, isi aja nasi padang."
+];
+
+function tampilkanQuote() {
+    const randomIndex = Math.floor(Math.random() * quotes.length);
+    document.getElementById("quote").innerText = quotes[randomIndex];
+}
+</script>
+
 </body>
 </html>
