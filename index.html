@@ -1,82 +1,202 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<title>Random Quotes Lucu & Bijak</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Prakiraan Cuaca BMKG — 3 Hari (Otomatis Tema)</title>
 <style>
-    body { font-family: Arial, sans-serif; background:#222; color:#fff; text-align:center; padding:20px; }
-    .box { background:#333; padding:20px; border-radius:10px; width:90%; max-width:500px; margin:auto; }
-    button { padding:10px 20px; background:#00aaff; border:none; color:white; cursor:pointer; font-size:16px; border-radius:5px; margin-top:10px; }
-    button:hover { background:#0088cc; }
+  :root{
+    --bg:#fff; --card:#f7fafc; --text:#0b1220; --muted:#4b5563; --accent:#2563eb;
+    --glass: rgba(11,18,32,0.03);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root{
+      --bg:#0f172a; --card:#0f172a; --text:#e6eef6; --muted:#9aa5b1; --accent:#3b82f6;
+      --glass: rgba(255,255,255,0.03);
+    }
+  }
+  html,body{height:100%;margin:0;background:var(--bg);font-family:Inter,system-ui,Arial;color:var(--text)}
+  .wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+  .card{width:100%;max-width:720px;background:linear-gradient(180deg,var(--card),rgba(0,0,0,0.02));border-radius:12px;padding:18px;box-shadow:0 8px 30px rgba(2,6,23,0.25)}
+  header{display:flex;gap:12px;align-items:center}
+  h1{margin:0;font-size:18px}
+  .lead{color:var(--muted);font-size:13px;margin:0}
+  .controls{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+  input,select,button{padding:10px;border-radius:8px;border:1px solid rgba(0,0,0,0.06);font-size:14px}
+  input,select{background:transparent;color:var(--text);flex:1}
+  button{background:var(--accent);color:#fff;border:0;cursor:pointer}
+  button.secondary{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted)}
+  .cols{display:flex;gap:12px;margin-top:18px;flex-wrap:wrap}
+  .left{flex:1;min-width:220px}
+  .right{flex:1;min-width:220px}
+  .city-list{margin-top:12px;max-height:240px;overflow:auto;padding-right:6px}
+  .city-list button{width:100%;text-align:left;padding:8px;border-radius:8px;border:0;background:transparent;color:var(--text);margin-bottom:6px;cursor:pointer}
+  .city-list button:hover{background:var(--glass)}
+  .hasil{margin-top:12px}
+  .forecast{display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:10px;margin-top:10px}
+  .day{background:rgba(255,255,255,0.03);padding:10px;border-radius:10px;text-align:center}
+  .muted{color:var(--muted);font-size:13px}
+  .note{margin-top:10px;color:var(--muted);font-size:12px}
+  footer{margin-top:14px;color:var(--muted);font-size:12px}
+  @media(max-width:640px){header{flex-direction:column;align-items:flex-start}}
 </style>
 </head>
 <body>
+<div class="wrap">
+  <div class="card" role="main">
+    <header>
+      <div>
+        <h1>Prakiraan Cuaca BMKG — 3 Hari</h1>
+        <p class="lead">Pilih provinsi → pilih kota. Mengikuti tema sistem (otomatis).</p>
+      </div>
+      <div style="margin-left:auto;display:flex;gap:8px;align-items:center">
+        <div class="muted">Tema: otomatis</div>
+      </div>
+    </header>
 
-<h1>😂 Random Quotes Lucu & Bijak 💡</h1>
+    <div class="controls">
+      <select id="provinsi">
+        <option value="JawaTimur">Jawa Timur</option>
+        <option value="JawaTengah">Jawa Tengah</option>
+        <option value="JawaBarat">Jawa Barat</option>
+        <option value="DKIJakarta">DKI Jakarta</option>
+      </select>
+      <input id="filterCity" placeholder="Filter nama kota (opsional)" />
+      <button id="btnList">Lihat Kota</button>
+      <button class="secondary" id="btnClear">Bersihkan</button>
+    </div>
 
-<div class="box">
-    <p id="quote">Klik tombol di bawah untuk mendapatkan kata-kata.</p>
-    <button onclick="tampilkanQuote()">🎲 Acak Quote</button>
+    <div class="cols">
+      <div class="left">
+        <div id="kotaArea" class="city-list muted">Daftar kota akan tampil di sini.</div>
+      </div>
+      <div class="right">
+        <div id="hasil" class="hasil muted">Pilih kota untuk lihat prakiraan.</div>
+      </div>
+    </div>
+
+    <div class="note">
+      Catatan: data dari BMKG. Jika muncul pesan gagal, jalankan lewat Live Server atau ulangi (proxy fallback aktif).
+    </div>
+    <footer>Built with BMKG data • Proxy fallback: allorigins / corsproxy / thingproxy</footer>
+  </div>
 </div>
 
 <script>
-const quotes = [
-    "Hidup itu sederhana, yang bikin ribet itu pikiran sendiri.",
-    "Kalau gagal, coba lagi. Kalau masih gagal, berarti bukan jodohmu.",
-    "Belajar itu berat, tapi tidak belajar lebih berat lagi.",
-    "Orang sabar disayang Tuhan, tapi kalau kesabaran habis ya urusan manusia.",
-    "Jangan takut gagal. Gagal itu biasa, yang luar biasa itu kalau nggak nyoba.",
-    "Kesuksesan itu butuh proses. Kalau instan namanya mie.",
-    "Bahagia itu sederhana: tidur nyenyak, bangun gak kesiangan.",
-    "Fokuslah pada tujuanmu, kecuali ada promo gratis ongkir.",
-    "Jangan bandingkan dirimu dengan orang lain. Bandingkan aja harga mie sekarang sama dulu.",
-    "Kalau gagal, coba lagi. Kalau masih gagal, tidur dulu.",
-    "Bahagia itu sederhana: tidur nyenyak tanpa ingat tugas.",
-    "Aku tidak malas, aku hanya dalam mode hemat energi.",
-    "Bekerja keraslah, nanti bos kamu jadi makin kaya.",
-    "Jangan takut jelek. Yang penting bukan fotomu di KTP.",
-    "Olahraga paling berat adalah mengangkat beban kehidupan.",
-    "Aku sih ikhlas, meskipun ngeluh dulu.",
-    "Diet bisa besok, makan enak harus sekarang.",
-    "Cita-citaku sederhana: kaya tanpa kerja.",
-    "Kalau mimpi jadi kenyataan itu indah, tapi kalau tidur di kelas itu nyata.",
-    "Orang sabar disayang Tuhan, tapi kalau kebablasan disayang orang lain.",
-    "Diet itu gampang, yang susah itu konsisten nggak jajan siomay.",
-    "Bahagia itu sederhana, bisa tidur siang tanpa diganggu.",
-    "Cinta itu buta, tapi tetangga tetap bisa lihat kalau kamu lagi bucin.",
-    "Hidup itu kayak game, kadang naik level, kadang malah lag.",
-    "Belajar itu berat... makanya aku memilih rebahan.",
-    "Hidup itu simpel, yang ribet itu kalau pulsa habis pas mau OTP.",
-    "Jangan iri sama orang kaya. Bisa jadi dia juga iri sama tidur nyenyakmu.",
-    "Kalau rindu itu berat, kenapa timbangan nggak nambah?",
-    "Aku bukan pemalas, aku cuma sedang mode hemat energi.",
-    "Dompet sudah seperti bawang... dibuka bikin nangis.",
-    "Semangat boleh turun, tapi ingat... galon di rumah sudah kosong.",
-    "Makan boleh banyak, asal ingat... utang nasi padang belum dibayar.",
-    "Jika gagal, coba lagi. Jika masih gagal, tidur aja dulu.",
-    "Belajar keras hari ini, untuk tidur nyenyak besok.",
-    "Bekerja keraslah... karena saldo tidak akan bertambah sendiri.",
-    "Mimpi tidak akan tercapai kalau kamu kebanyakan rebahan. Tapi rebahan juga penting.",
-    "Kesuksesan berawal dari mimpi. Maka dari itu, aku tidur lagi.",
-    "Jangan terlalu baik sama orang. Nanti dikira Indomaret.",
-    "Orang sabar disayang Tuhan, tapi kalau kebanyakan sabar disayang semua orang.",
-    "Kalau hidupmu terasa berat, mungkin kamu kurang makan.",
-    "Masalah datang bukan untuk dijauhi, tapi untuk difoto dan dijadikan status.",
-    "Aku bukan malas, aku cuma sedang hemat energi.",
-    "Belajar dari lemper, dibungkus rapi tapi dalamnya ketan.",
-    "Jangan sedih kalau kamu jomblo, itu bukan salah kamu… salah yang gak mau sama kamu.",
-    "Kalau kamu merasa jelek, tenang… itu cuma perasaan. Faktanya? Ya begitu.",
-    "Cinta itu kayak kentut, kalau dipaksa pasti berak.",
-    "Masalah jangan dibesar-besarkan… kecuali kalau mau masuk TV.",
-    "Bangun pagi itu berat, yang ringan cuma mata saat merem.",
-    "Kalau hatimu kosong, isi aja nasi padang."
+const proxies = [
+  url => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
+  url => `https://corsproxy.io/?${url}`,
+  url => `https://thingproxy.freeboard.io/fetch/${url}`
 ];
 
-function tampilkanQuote() {
-    const randomIndex = Math.floor(Math.random() * quotes.length);
-    document.getElementById("quote").innerText = quotes[randomIndex];
+const provSelect = document.getElementById('provinsi');
+const kotaArea = document.getElementById('kotaArea');
+const hasil = document.getElementById('hasil');
+const btnList = document.getElementById('btnList');
+const filterCity = document.getElementById('filterCity');
+const btnClear = document.getElementById('btnClear');
+
+btnList.addEventListener('click', () => loadCities());
+btnClear.addEventListener('click', () => {
+  kotaArea.innerHTML = 'Daftar kota akan tampil di sini.';
+  hasil.innerHTML = 'Pilih kota untuk lihat prakiraan.';
+  filterCity.value = '';
+});
+
+filterCity.addEventListener('input', () => {
+  const q = filterCity.value.trim().toLowerCase();
+  Array.from(kotaArea.querySelectorAll('button')).forEach(b => {
+    b.style.display = b.textContent.toLowerCase().includes(q) ? '' : 'none';
+  });
+});
+
+async function fetchBMKGXML(prov) {
+  const base = `https://data.bmkg.go.id/DataMKG/MEWS/DigitalForecast/DigitalForecast-${prov}.xml`;
+  for (const mk of proxies) {
+    const url = mk(base);
+    try {
+      const res = await fetch(url, {cache: "no-store"});
+      if (!res.ok) throw new Error(`proxy ${url} returned ${res.status}`);
+      const text = await res.text();
+      if (!text.includes('<area')) throw new Error('invalid xml');
+      return text;
+    } catch (e) {
+      console.warn('Proxy failed:', e.message || e);
+    }
+  }
+  throw new Error('Semua proxy gagal atau diblokir.');
+}
+
+async function loadCities() {
+  kotaArea.innerHTML = '🔄 Mengambil daftar kota...';
+  hasil.innerHTML = '';
+  const prov = provSelect.value;
+  try {
+    const text = await fetchBMKGXML(prov);
+    const xml = new DOMParser().parseFromString(text, 'text/xml');
+    const areas = Array.from(xml.getElementsByTagName('area'));
+    if (!areas.length) throw new Error('Tidak ada data area.');
+    window.__bmkg_xml = xml;
+    kotaArea.innerHTML = '<h3 style="margin:6px 0 8px 0">Pilih Kota:</h3>';
+    areas.slice(0, 60).forEach(area => {
+      const desc = area.getAttribute('description') || 'Tanpa nama';
+      const btn = document.createElement('button');
+      btn.textContent = desc;
+      btn.onclick = () => tampilkanCuaca(area);
+      kotaArea.appendChild(btn);
+    });
+    filterCity.dispatchEvent(new Event('input'));
+  } catch (err) {
+    kotaArea.innerHTML = `<div style="color:var(--muted)">❌ ${err.message}</div>`;
+  }
+}
+
+function mapWeatherCodeToIcon(code) {
+  const map = {
+    0: ["Cerah", "☀️"],
+    1: ["Cerah Berawan", "🌤️"],
+    2: ["Berawan", "⛅"],
+    3: ["Berawan Tebal", "☁️"],
+    4: ["Udara Kabur", "🌫️"],
+    5: ["Hujan Ringan", "🌦️"],
+    6: ["Hujan Sedang", "🌧️"],
+    7: ["Hujan Lebat", "⛈️"],
+    10: ["Asap", "🌫️"],
+    45: ["Kabut", "🌁"]
+  };
+  return map[code] || ["Tidak diketahui", "❔"];
+}
+
+function tampilkanCuaca(area) {
+  hasil.innerHTML = "🔄 Mengambil prakiraan cuaca...";
+  const suhuParam = Array.from(area.getElementsByTagName("parameter")).find(p => p.getAttribute("id") === "t");
+  const cuacaParam = Array.from(area.getElementsByTagName("parameter")).find(p => p.getAttribute("id") === "weather");
+  if (!suhuParam || !cuacaParam) {
+    hasil.innerHTML = "⚠️ Data suhu/cuaca tidak ditemukan untuk kota ini.";
+    return;
+  }
+  const suhuList = Array.from(suhuParam.getElementsByTagName("timerange")).slice(0, 6);
+  const cuacaList = Array.from(cuacaParam.getElementsByTagName("timerange")).slice(0, 6);
+
+  let html = `<h3>${area.getAttribute("description")}</h3><div class="forecast">`;
+  for (let i = 0; i < 6; i += 2) {
+    const waktu = cuacaList[i].getAttribute("datetime");
+    const date = new Date(
+      waktu.slice(0,4), waktu.slice(4,6)-1, waktu.slice(6,8), waktu.slice(8,10)
+    );
+    const kode = cuacaList[i].getElementsByTagName("value")[0].textContent;
+    const suhu = suhuList[i].getElementsByTagName("value")[0].textContent;
+    const [desc, icon] = mapWeatherCodeToIcon(kode);
+    html += `<div class="day">
+      <div>${date.toLocaleDateString('id-ID',{weekday:'short',day:'numeric',month:'short'})}</div>
+      <div style="font-size:32px">${icon}</div>
+      <div><strong>${suhu}°C</strong></div>
+      <div>${desc}</div>
+    </div>`;
+  }
+  html += "</div>";
+  hasil.innerHTML = html;
 }
 </script>
-
 </body>
 </html>
