@@ -1,201 +1,100 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Prakiraan Cuaca BMKG — 3 Hari (Otomatis Tema)</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cuaca Jawa Timur (Real-Time)</title>
 <style>
-  :root{
-    --bg:#fff; --card:#f7fafc; --text:#0b1220; --muted:#4b5563; --accent:#2563eb;
-    --glass: rgba(11,18,32,0.03);
-  }
-  @media (prefers-color-scheme: dark) {
-    :root{
-      --bg:#0f172a; --card:#0f172a; --text:#e6eef6; --muted:#9aa5b1; --accent:#3b82f6;
-      --glass: rgba(255,255,255,0.03);
-    }
-  }
-  html,body{height:100%;margin:0;background:var(--bg);font-family:Inter,system-ui,Arial;color:var(--text)}
-  .wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
-  .card{width:100%;max-width:720px;background:linear-gradient(180deg,var(--card),rgba(0,0,0,0.02));border-radius:12px;padding:18px;box-shadow:0 8px 30px rgba(2,6,23,0.25)}
-  header{display:flex;gap:12px;align-items:center}
-  h1{margin:0;font-size:18px}
-  .lead{color:var(--muted);font-size:13px;margin:0}
-  .controls{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
-  input,select,button{padding:10px;border-radius:8px;border:1px solid rgba(0,0,0,0.06);font-size:14px}
-  input,select{background:transparent;color:var(--text);flex:1}
-  button{background:var(--accent);color:#fff;border:0;cursor:pointer}
-  button.secondary{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted)}
-  .cols{display:flex;gap:12px;margin-top:18px;flex-wrap:wrap}
-  .left{flex:1;min-width:220px}
-  .right{flex:1;min-width:220px}
-  .city-list{margin-top:12px;max-height:240px;overflow:auto;padding-right:6px}
-  .city-list button{width:100%;text-align:left;padding:8px;border-radius:8px;border:0;background:transparent;color:var(--text);margin-bottom:6px;cursor:pointer}
-  .city-list button:hover{background:var(--glass)}
-  .hasil{margin-top:12px}
-  .forecast{display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:10px;margin-top:10px}
-  .day{background:rgba(255,255,255,0.03);padding:10px;border-radius:10px;text-align:center}
-  .muted{color:var(--muted);font-size:13px}
-  .note{margin-top:10px;color:var(--muted);font-size:12px}
-  footer{margin-top:14px;color:var(--muted);font-size:12px}
-  @media(max-width:640px){header{flex-direction:column;align-items:flex-start}}
+  body { font-family:Arial, sans-serif; background:#0f172a; color:#e6eef6; margin:0; padding:20px; }
+  .container { max-width:700px; margin:auto; background:#1e293b; border-radius:12px; padding:20px; box-shadow:0 0 20px rgba(0,0,0,0.3); }
+  h1 { margin-top:0; color:#60a5fa; }
+  select,button { padding:10px; border:none; border-radius:8px; margin:5px 0; }
+  select { width:100%; background:#334155; color:#fff; }
+  button { background:#3b82f6; color:#fff; cursor:pointer; }
+  button:hover { background:#2563eb; }
+  .forecast { display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:10px; margin-top:15px; }
+  .day { background:#334155; border-radius:10px; padding:10px; text-align:center; }
+  footer { text-align:center; margin-top:15px; color:#94a3b8; font-size:12px; }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <div class="card" role="main">
-    <header>
-      <div>
-        <h1>Prakiraan Cuaca BMKG — 3 Hari</h1>
-        <p class="lead">Pilih provinsi → pilih kota. Mengikuti tema sistem (otomatis).</p>
-      </div>
-      <div style="margin-left:auto;display:flex;gap:8px;align-items:center">
-        <div class="muted">Tema: otomatis</div>
-      </div>
-    </header>
+<div class="container">
+  <h1>🌤️ Cuaca Jawa Timur (Real-Time)</h1>
+  <p>Pilih kota untuk melihat prakiraan cuaca 3 hari ke depan (OpenWeatherMap).</p>
+  <select id="kota">
+    <option value="">— Pilih Kota —</option>
+    <option>Kediri</option>
+    <option>Malang</option>
+    <option>Jombang</option>
+    <option>Tulungagung</option>
+    <option>Trenggalek</option>
+    <option>Blitar</option>
+    <option>Mojokerto</option>
+    <option>Surabaya</option>
+    <option>Sidoarjo</option>
+    <option>Probolinggo</option>
+    <option>Bojonegoro</option>
+    <option>Madiun</option>
+    <option>Lamongan</option>
+    <option>Jember</option>
+    <option>Banyuwangi</option>
+    <option>Ponorogo</option>
+  </select>
+  <button onclick="getWeather()">Lihat Cuaca</button>
 
-    <div class="controls">
-      <select id="provinsi">
-        <option value="JawaTimur">Jawa Timur</option>
-        <option value="JawaTengah">Jawa Tengah</option>
-        <option value="JawaBarat">Jawa Barat</option>
-        <option value="DKIJakarta">DKI Jakarta</option>
-      </select>
-      <input id="filterCity" placeholder="Filter nama kota (opsional)" />
-      <button id="btnList">Lihat Kota</button>
-      <button class="secondary" id="btnClear">Bersihkan</button>
-    </div>
+  <div id="hasil"></div>
 
-    <div class="cols">
-      <div class="left">
-        <div id="kotaArea" class="city-list muted">Daftar kota akan tampil di sini.</div>
-      </div>
-      <div class="right">
-        <div id="hasil" class="hasil muted">Pilih kota untuk lihat prakiraan.</div>
-      </div>
-    </div>
-
-    <div class="note">
-      Catatan: data dari BMKG. Jika muncul pesan gagal, jalankan lewat Live Server atau ulangi (proxy fallback aktif).
-    </div>
-    <footer>Built with BMKG data • Proxy fallback: allorigins / corsproxy / thingproxy</footer>
-  </div>
+  <footer>Data real-time © OpenWeatherMap</footer>
 </div>
 
 <script>
-const proxies = [
-  url => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
-  url => `https://corsproxy.io/?${url}`,
-  url => `https://thingproxy.freeboard.io/fetch/${url}`
-];
+const API_KEY = "c83109cbf1b220f3f5355debc389e2fa"; // gunakan API key kamu
+async function getWeather(){
+  const kota = document.getElementById("kota").value;
+  const hasil = document.getElementById("hasil");
+  if(!kota){ hasil.innerHTML = "<p>⚠️ Silakan pilih kota dulu.</p>"; return; }
 
-const provSelect = document.getElementById('provinsi');
-const kotaArea = document.getElementById('kotaArea');
-const hasil = document.getElementById('hasil');
-const btnList = document.getElementById('btnList');
-const filterCity = document.getElementById('filterCity');
-const btnClear = document.getElementById('btnClear');
-
-btnList.addEventListener('click', () => loadCities());
-btnClear.addEventListener('click', () => {
-  kotaArea.innerHTML = 'Daftar kota akan tampil di sini.';
-  hasil.innerHTML = 'Pilih kota untuk lihat prakiraan.';
-  filterCity.value = '';
-});
-
-filterCity.addEventListener('input', () => {
-  const q = filterCity.value.trim().toLowerCase();
-  Array.from(kotaArea.querySelectorAll('button')).forEach(b => {
-    b.style.display = b.textContent.toLowerCase().includes(q) ? '' : 'none';
-  });
-});
-
-async function fetchBMKGXML(prov) {
-  const base = `https://data.bmkg.go.id/DataMKG/MEWS/DigitalForecast/DigitalForecast-${prov}.xml`;
-  for (const mk of proxies) {
-    const url = mk(base);
-    try {
-      const res = await fetch(url, {cache: "no-store"});
-      if (!res.ok) throw new Error(`proxy ${url} returned ${res.status}`);
-      const text = await res.text();
-      if (!text.includes('<area')) throw new Error('invalid xml');
-      return text;
-    } catch (e) {
-      console.warn('Proxy failed:', e.message || e);
-    }
-  }
-  throw new Error('Semua proxy gagal atau diblokir.');
-}
-
-async function loadCities() {
-  kotaArea.innerHTML = '🔄 Mengambil daftar kota...';
-  hasil.innerHTML = '';
-  const prov = provSelect.value;
+  hasil.innerHTML = "🔄 Mengambil data cuaca...";
   try {
-    const text = await fetchBMKGXML(prov);
-    const xml = new DOMParser().parseFromString(text, 'text/xml');
-    const areas = Array.from(xml.getElementsByTagName('area'));
-    if (!areas.length) throw new Error('Tidak ada data area.');
-    window.__bmkg_xml = xml;
-    kotaArea.innerHTML = '<h3 style="margin:6px 0 8px 0">Pilih Kota:</h3>';
-    areas.slice(0, 60).forEach(area => {
-      const desc = area.getAttribute('description') || 'Tanpa nama';
-      const btn = document.createElement('button');
-      btn.textContent = desc;
-      btn.onclick = () => tampilkanCuaca(area);
-      kotaArea.appendChild(btn);
+    // ambil koordinat kota
+    const geo = await fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${encodeURIComponent(kota)},ID&limit=1&appid=${API_KEY}`);
+    const [loc] = await geo.json();
+    if(!loc){ hasil.innerHTML = "❌ Lokasi tidak ditemukan."; return; }
+
+    // ambil prakiraan cuaca 3 hari ke depan
+    const lat = loc.lat, lon = loc.lon;
+    const res = await fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric&lang=id`);
+    const data = await res.json();
+
+    const daily = [];
+    for(let i=0; i<data.list.length; i+=8){ // setiap 24 jam (8x3jam)
+      const d = data.list[i];
+      const date = new Date(d.dt * 1000);
+      daily.push({
+        date: date.toLocaleDateString('id-ID',{weekday:'short',day:'numeric',month:'short'}),
+        temp: d.main.temp.toFixed(1),
+        desc: d.weather[0].description,
+        icon: d.weather[0].icon
+      });
+      if(daily.length === 3) break;
+    }
+
+    let html = `<h2>${kota}</h2><div class="forecast">`;
+    daily.forEach(d=>{
+      html += `
+        <div class="day">
+          <div>${d.date}</div>
+          <img src="https://openweathermap.org/img/wn/${d.icon}@2x.png" alt="" width="60">
+          <div><strong>${d.temp}°C</strong></div>
+          <div>${d.desc}</div>
+        </div>`;
     });
-    filterCity.dispatchEvent(new Event('input'));
-  } catch (err) {
-    kotaArea.innerHTML = `<div style="color:var(--muted)">❌ ${err.message}</div>`;
+    html += "</div>";
+    hasil.innerHTML = html;
+  } catch (e) {
+    hasil.innerHTML = "❌ Gagal mengambil data cuaca.";
+    console.error(e);
   }
-}
-
-function mapWeatherCodeToIcon(code) {
-  const map = {
-    0: ["Cerah", "☀️"],
-    1: ["Cerah Berawan", "🌤️"],
-    2: ["Berawan", "⛅"],
-    3: ["Berawan Tebal", "☁️"],
-    4: ["Udara Kabur", "🌫️"],
-    5: ["Hujan Ringan", "🌦️"],
-    6: ["Hujan Sedang", "🌧️"],
-    7: ["Hujan Lebat", "⛈️"],
-    10: ["Asap", "🌫️"],
-    45: ["Kabut", "🌁"]
-  };
-  return map[code] || ["Tidak diketahui", "❔"];
-}
-
-function tampilkanCuaca(area) {
-  hasil.innerHTML = "🔄 Mengambil prakiraan cuaca...";
-  const suhuParam = Array.from(area.getElementsByTagName("parameter")).find(p => p.getAttribute("id") === "t");
-  const cuacaParam = Array.from(area.getElementsByTagName("parameter")).find(p => p.getAttribute("id") === "weather");
-  if (!suhuParam || !cuacaParam) {
-    hasil.innerHTML = "⚠️ Data suhu/cuaca tidak ditemukan untuk kota ini.";
-    return;
-  }
-  const suhuList = Array.from(suhuParam.getElementsByTagName("timerange")).slice(0, 6);
-  const cuacaList = Array.from(cuacaParam.getElementsByTagName("timerange")).slice(0, 6);
-
-  let html = `<h3>${area.getAttribute("description")}</h3><div class="forecast">`;
-  for (let i = 0; i < 6; i += 2) {
-    const waktu = cuacaList[i].getAttribute("datetime");
-    const date = new Date(
-      waktu.slice(0,4), waktu.slice(4,6)-1, waktu.slice(6,8), waktu.slice(8,10)
-    );
-    const kode = cuacaList[i].getElementsByTagName("value")[0].textContent;
-    const suhu = suhuList[i].getElementsByTagName("value")[0].textContent;
-    const [desc, icon] = mapWeatherCodeToIcon(kode);
-    html += `<div class="day">
-      <div>${date.toLocaleDateString('id-ID',{weekday:'short',day:'numeric',month:'short'})}</div>
-      <div style="font-size:32px">${icon}</div>
-      <div><strong>${suhu}°C</strong></div>
-      <div>${desc}</div>
-    </div>`;
-  }
-  html += "</div>";
-  hasil.innerHTML = html;
 }
 </script>
 </body>
