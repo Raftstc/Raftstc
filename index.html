@@ -1,101 +1,228 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Cuaca Jawa Timur (Real-Time)</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🌤️ Cuaca Indonesia — Full Dashboard</title>
 <style>
-  body { font-family:Arial, sans-serif; background:#0f172a; color:#e6eef6; margin:0; padding:20px; }
-  .container { max-width:700px; margin:auto; background:#1e293b; border-radius:12px; padding:20px; box-shadow:0 0 20px rgba(0,0,0,0.3); }
-  h1 { margin-top:0; color:#60a5fa; }
-  select,button { padding:10px; border:none; border-radius:8px; margin:5px 0; }
-  select { width:100%; background:#334155; color:#fff; }
-  button { background:#3b82f6; color:#fff; cursor:pointer; }
-  button:hover { background:#2563eb; }
-  .forecast { display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:10px; margin-top:15px; }
-  .day { background:#334155; border-radius:10px; padding:10px; text-align:center; }
-  footer { text-align:center; margin-top:15px; color:#94a3b8; font-size:12px; }
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Poppins', sans-serif;
+  text-align: center;
+  padding: 25px;
+  min-height: 100vh;
+  transition: background 1s, color 1s;
+}
+
+h1 {
+  font-size: 26px;
+  margin-bottom: 15px;
+  text-shadow: 0 0 15px rgba(255,255,255,0.4);
+}
+
+.selector {
+  background: rgba(255,255,255,0.08);
+  padding: 20px;
+  border-radius: 20px;
+  display: inline-block;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 30px rgba(0,0,0,0.3);
+  margin-bottom: 20px;
+  max-width: 500px;
+}
+
+input, button {
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: none;
+  font-size: 15px;
+  margin: 5px;
+  font-family: inherit;
+  outline: none;
+}
+
+input {
+  width: 250px;
+  background: rgba(255,255,255,0.2);
+  color: #fff;
+}
+
+button {
+  background: linear-gradient(135deg,#38bdf8,#2563eb);
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+button:hover { transform: scale(1.05); opacity: 0.9; }
+
+#hasil {
+  margin-top: 30px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 18px;
+  animation: fadeIn 0.8s ease;
+}
+
+.card {
+  background: rgba(255,255,255,0.1);
+  border-radius: 18px;
+  padding: 18px;
+  width: 180px;
+  transition: 0.4s;
+  box-shadow: 0 4px 25px rgba(0,0,0,0.3);
+  backdrop-filter: blur(8px);
+  position: relative;
+  overflow: hidden;
+}
+.card:hover {
+  transform: translateY(-5px) scale(1.03);
+  background: rgba(255,255,255,0.18);
+}
+
+.card img {
+  width: 90px;
+  height: 90px;
+  margin: 8px 0;
+  animation: float 2.5s ease-in-out infinite;
+}
+
+.card h3 { margin: 5px 0; font-size: 16px; color: #38bdf8; }
+.card p { margin: 3px 0; font-size: 14px; }
+.city-title {
+  font-size: 22px;
+  font-weight: 600;
+  margin: 15px 0;
+  text-shadow: 0 0 12px rgba(255,255,255,0.3);
+}
+
+ul#suggestions {
+  position: absolute;
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(8px);
+  list-style: none;
+  padding: 0;
+  margin: 5px auto;
+  width: 250px;
+  border-radius: 8px;
+  max-height: 150px;
+  overflow-y: auto;
+  text-align: left;
+}
+
+ul#suggestions li {
+  padding: 8px 10px;
+  cursor: pointer;
+  color: #fff;
+}
+ul#suggestions li:hover { background: rgba(255,255,255,0.2); }
+
+@keyframes float { 0%,100%{transform:translateY(0);}50%{transform:translateY(-6px);} }
+@keyframes fadeIn { from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);} }
+
+footer { margin-top: 30px; font-size: 13px; opacity: 0.7; color: #fff; }
 </style>
 </head>
 <body>
-<div class="container">
-  <h1>🌤️ Cuaca Jawa Timur (Real-Time)</h1>
-  <p>Pilih kota untuk melihat prakiraan cuaca 3 hari ke depan (OpenWeatherMap).</p>
-  <select id="kota">
-    <option value="">— Pilih Kota —</option>
-    <option>Kediri</option>
-    <option>Malang</option>
-    <option>Jombang</option>
-    <option>Tulungagung</option>
-    <option>Trenggalek</option>
-    <option>Blitar</option>
-    <option>Mojokerto</option>
-    <option>Surabaya</option>
-    <option>Sidoarjo</option>
-    <option>Probolinggo</option>
-    <option>Bojonegoro</option>
-    <option>Madiun</option>
-    <option>Lamongan</option>
-    <option>Jember</option>
-    <option>Banyuwangi</option>
-    <option>Ponorogo</option>
-  </select>
-  <button onclick="getWeather()">Lihat Cuaca</button>
 
-  <div id="hasil"></div>
+<h1>🌤️ Cuaca Indonesia — 5 Hari ke Depan</h1>
 
-  <footer>Data real-time © OpenWeatherMap</footer>
+<div class="selector">
+  <input type="text" id="inputKota" placeholder="Ketik nama kota..." oninput="autocomplete()">
+  <ul id="suggestions"></ul>
+  <button onclick="ambilCuaca()">🔍 Lihat Cuaca</button>
 </div>
 
+<div id="hasil"><p>🌍 Silakan ketik dan pilih kota</p></div>
+
+<footer>Data oleh OpenWeatherMap | Made with Raftstc</footer>
+
 <script>
-const API_KEY = "c83109cbf1b220f3f5355debc389e2fa"; // gunakan API key kamu
-async function getWeather(){
-  const kota = document.getElementById("kota").value;
+const API_KEY = "c83109cbf1b220f3f5355debc389e2fa";
+
+// Semua kota Indonesia (contoh, bisa ditambah lengkap)
+const semuaKota = [
+"Jakarta","Bandung","Surabaya","Yogyakarta","Medan","Semarang","Makassar","Denpasar","Palembang","Malang","Bogor",
+"Kediri","Jombang","Tulungagung","Trenggalek","Blitar","Banyuwangi","Solo","Semarang","Samarinda","Balikpapan","Jayapura"
+];
+
+function autocomplete() {
+  const val = document.getElementById("inputKota").value.toLowerCase();
+  const suggestions = document.getElementById("suggestions");
+  suggestions.innerHTML = "";
+  if(!val) return;
+  const matches = semuaKota.filter(k => k.toLowerCase().includes(val));
+  matches.forEach(k => {
+    const li = document.createElement("li");
+    li.textContent = k;
+    li.onclick = () => { document.getElementById("inputKota").value = k; suggestions.innerHTML=""; };
+    suggestions.appendChild(li);
+  });
+}
+
+async function ambilCuaca() {
+  const kota = document.getElementById("inputKota").value;
   const hasil = document.getElementById("hasil");
-  if(!kota){ hasil.innerHTML = "<p>⚠️ Silakan pilih kota dulu.</p>"; return; }
+  if(!kota) return hasil.innerHTML="<p>⚠️ Silakan pilih kota terlebih dahulu!</p>";
+  hasil.innerHTML="<p>🔄 Mengambil data cuaca...</p>";
 
-  hasil.innerHTML = "🔄 Mengambil data cuaca...";
-  try {
-    // ambil koordinat kota
-    const geo = await fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${encodeURIComponent(kota)},ID&limit=1&appid=${API_KEY}`);
-    const [loc] = await geo.json();
-    if(!loc){ hasil.innerHTML = "❌ Lokasi tidak ditemukan."; return; }
+  try{
+    const geoRes = await fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${kota},ID&limit=1&appid=${API_KEY}`);
+    const geoData = await geoRes.json();
+    if(!geoData.length) throw new Error("Kota tidak ditemukan!");
+    const {lat,lon} = geoData[0];
 
-    // ambil prakiraan cuaca 3 hari ke depan
-    const lat = loc.lat, lon = loc.lon;
-    const res = await fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric&lang=id`);
-    const data = await res.json();
+    const weatherRes = await fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=metric&lang=id&appid=${API_KEY}`);
+    const data = await weatherRes.json();
 
-    const daily = [];
-    for(let i=0; i<data.list.length; i+=8){ // setiap 24 jam (8x3jam)
-      const d = data.list[i];
-      const date = new Date(d.dt * 1000);
-      daily.push({
-        date: date.toLocaleDateString('id-ID',{weekday:'short',day:'numeric',month:'short'}),
-        temp: d.main.temp.toFixed(1),
-        desc: d.weather[0].description,
-        icon: d.weather[0].icon
-      });
-      if(daily.length === 3) break;
+    // Set background berdasarkan cuaca pertama
+    const kondisi = data.list[0].weather[0].main.toLowerCase();
+    switch(kondisi){
+      case"clear":document.body.style.background="linear-gradient(135deg,#38bdf8,#1e3a8a)";break;
+      case"clouds":document.body.style.background="linear-gradient(135deg,#6b7280,#374151)";break;
+      case"rain":document.body.style.background="linear-gradient(135deg,#3b82f6,#1e40af)";break;
+      case"snow":document.body.style.background="linear-gradient(135deg,#e0f2fe,#0284c7)";break;
+      default:document.body.style.background="linear-gradient(135deg,#0f172a,#1e293b)";
     }
 
-    let html = `<h2>${kota}</h2><div class="forecast">`;
-    daily.forEach(d=>{
-      html += `
-        <div class="day">
-          <div>${d.date}</div>
-          <img src="https://openweathermap.org/img/wn/${d.icon}@2x.png" alt="" width="60">
-          <div><strong>${d.temp}°C</strong></div>
-          <div>${d.desc}</div>
-        </div>`;
+    const days = {};
+    data.list.forEach(item => {
+      const date = item.dt_txt.split(" ")[0];
+      if(!days[date]) days[date]=item;
     });
-    html += "</div>";
-    hasil.innerHTML = html;
-  } catch (e) {
-    hasil.innerHTML = "❌ Gagal mengambil data cuaca.";
-    console.error(e);
+
+    hasil.innerHTML = `<div class="city-title">${kota}</div>`;
+    let count=0;
+    for(const tgl in days){
+      if(count++>=5) break;
+      const item=days[tgl];
+      const icon=item.weather[0].icon;
+      const desc=item.weather[0].description;
+      const suhu=item.main.temp.toFixed(1);
+      hasil.innerHTML+=`
+        <div class="card">
+          <h3>${new Date(tgl).toLocaleDateString("id-ID",{weekday:"long",day:"numeric",month:"long"})}</h3>
+          <img src="https://openweathermap.org/img/wn/${icon}@2x.png" alt="${desc}">
+          <p>${desc}</p>
+          <p>🌡️ ${suhu}°C</p>
+        </div>`;
+    }
+
+  }catch(err){
+    hasil.innerHTML=`<p>❌ Gagal mengambil data cuaca: ${err.message}</p>`;
   }
 }
+
+// Mode otomatis tema sistem
+if(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches){
+  document.body.style.background="linear-gradient(135deg,#0f172a,#1e293b)";
+}else{
+  document.body.style.background="linear-gradient(135deg,#38bdf8,#1e3a8a)";
+}
 </script>
+
 </body>
 </html>
