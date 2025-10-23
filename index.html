@@ -3,50 +3,55 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🌤️ Cuaca Indonesia — Full Dashboard</title>
+<title>🌤️ Cuaca Indonesia — Dashboard Animasi</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 * { box-sizing: border-box; margin: 0; padding: 0; }
-
 body {
   font-family: 'Poppins', sans-serif;
   text-align: center;
   padding: 25px;
   min-height: 100vh;
-  transition: background 1s, color 1s;
+  overflow-x: hidden;
+  transition: background 1s;
+  background: linear-gradient(135deg,#0f172a,#1e293b);
+  color: #fff;
 }
 
 h1 {
-  font-size: 26px;
-  margin-bottom: 15px;
-  text-shadow: 0 0 15px rgba(255,255,255,0.4);
+  font-size: 28px;
+  margin-bottom: 20px;
+  text-shadow: 0 0 15px rgba(255,255,255,0.5);
 }
 
 .selector {
-  background: rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.1);
   padding: 20px;
-  border-radius: 20px;
+  border-radius: 25px;
   display: inline-block;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 4px 30px rgba(0,0,0,0.3);
-  margin-bottom: 20px;
+  backdrop-filter: blur(15px);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+  margin-bottom: 30px;
   max-width: 500px;
+  position: relative;
+  z-index: 10;
 }
 
 input, button {
-  padding: 10px 14px;
-  border-radius: 8px;
+  padding: 12px 16px;
+  border-radius: 10px;
   border: none;
-  font-size: 15px;
+  font-size: 16px;
   margin: 5px;
   font-family: inherit;
   outline: none;
 }
 
 input {
-  width: 250px;
-  background: rgba(255,255,255,0.2);
+  width: 260px;
+  background: rgba(255,255,255,0.15);
   color: #fff;
+  backdrop-filter: blur(5px);
 }
 
 button {
@@ -63,67 +68,107 @@ button:hover { transform: scale(1.05); opacity: 0.9; }
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 18px;
+  gap: 20px;
   animation: fadeIn 0.8s ease;
+  position: relative;
+  z-index: 10;
 }
 
 .card {
-  background: rgba(255,255,255,0.1);
-  border-radius: 18px;
-  padding: 18px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 25px;
+  padding: 20px;
   width: 180px;
+  min-height: 320px;
   transition: 0.4s;
-  box-shadow: 0 4px 25px rgba(0,0,0,0.3);
-  backdrop-filter: blur(8px);
-  position: relative;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  backdrop-filter: blur(12px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   overflow: hidden;
+  position: relative;
 }
 .card:hover {
-  transform: translateY(-5px) scale(1.03);
+  transform: translateY(-8px) scale(1.05);
   background: rgba(255,255,255,0.18);
 }
 
-.card img {
+.card .city-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: 17px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  text-shadow: 0 0 15px rgba(255,255,255,0.4);
+}
+
+.card .city-title img {
+  width: 22px;
+  height: 22px;
+}
+
+.card img.weather-icon {
   width: 90px;
   height: 90px;
   margin: 8px 0;
-  animation: float 2.5s ease-in-out infinite;
+  animation: float 2s ease-in-out infinite;
 }
 
-.card h3 { margin: 5px 0; font-size: 16px; color: #38bdf8; }
-.card p { margin: 3px 0; font-size: 14px; }
-.city-title {
-  font-size: 22px;
-  font-weight: 600;
-  margin: 15px 0;
-  text-shadow: 0 0 12px rgba(255,255,255,0.3);
-}
+.card h3 { margin: 8px 0; font-size: 15px; color: #38bdf8; text-align: center; }
+.card p { margin: 4px 0; font-size: 14px; text-align: center; }
 
 ul#suggestions {
   position: absolute;
-  background: rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.15);
   backdrop-filter: blur(8px);
   list-style: none;
   padding: 0;
   margin: 5px auto;
-  width: 250px;
-  border-radius: 8px;
-  max-height: 150px;
+  width: 260px;
+  border-radius: 10px;
+  max-height: 160px;
   overflow-y: auto;
   text-align: left;
+  z-index: 100;
 }
 
 ul#suggestions li {
-  padding: 8px 10px;
+  padding: 10px 12px;
   cursor: pointer;
   color: #fff;
+  transition: 0.2s;
 }
-ul#suggestions li:hover { background: rgba(255,255,255,0.2); }
+ul#suggestions li:hover { background: rgba(255,255,255,0.25); }
 
-@keyframes float { 0%,100%{transform:translateY(0);}50%{transform:translateY(-6px);} }
+@keyframes float { 0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);} }
 @keyframes fadeIn { from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);} }
 
-footer { margin-top: 30px; font-size: 13px; opacity: 0.7; color: #fff; }
+.weather-effect {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.raindrop {
+  position: absolute;
+  width: 2px;
+  height: 15px;
+  background: rgba(173,216,230,0.6);
+  animation: fall 1s linear infinite;
+}
+
+@keyframes fall {
+  0% { transform: translateY(-20px); opacity: 1; }
+  100% { transform: translateY(100vh); opacity: 0; }
+}
+
+footer { margin-top: 40px; font-size: 13px; opacity: 0.7; color: #fff; z-index:10; position:relative;}
 </style>
 </head>
 <body>
@@ -136,17 +181,16 @@ footer { margin-top: 30px; font-size: 13px; opacity: 0.7; color: #fff; }
   <button onclick="ambilCuaca()">🔍 Lihat Cuaca</button>
 </div>
 
+<div class="weather-effect" id="weatherEffect"></div>
 <div id="hasil"><p>🌍 Silakan ketik dan pilih kota</p></div>
 
 <footer>Data oleh OpenWeatherMap | Made with Raftstc</footer>
 
 <script>
 const API_KEY = "c83109cbf1b220f3f5355debc389e2fa";
-
-// Semua kota Indonesia (contoh, bisa ditambah lengkap)
 const semuaKota = [
 "Jakarta","Bandung","Surabaya","Yogyakarta","Medan","Semarang","Makassar","Denpasar","Palembang","Malang","Bogor",
-"Kediri","Jombang","Tulungagung","Trenggalek","Blitar","Banyuwangi","Solo","Semarang","Samarinda","Balikpapan","Jayapura"
+"Kediri","Jombang","Tulungagung","Trenggalek","Blitar","Banyuwangi","Solo","Samarinda","Balikpapan","Jayapura"
 ];
 
 function autocomplete() {
@@ -163,11 +207,30 @@ function autocomplete() {
   });
 }
 
+function clearEffects(){
+  const container = document.getElementById('weatherEffect');
+  container.innerHTML = '';
+}
+
+function createRain() {
+  clearEffects();
+  const container = document.getElementById('weatherEffect');
+  for(let i=0;i<100;i++){
+    const drop = document.createElement('div');
+    drop.className='raindrop';
+    drop.style.left=Math.random()*100+'%';
+    drop.style.animationDuration=(0.5+Math.random()*0.5)+'s';
+    drop.style.height=(10+Math.random()*10)+'px';
+    container.appendChild(drop);
+  }
+}
+
 async function ambilCuaca() {
   const kota = document.getElementById("inputKota").value;
   const hasil = document.getElementById("hasil");
   if(!kota) return hasil.innerHTML="<p>⚠️ Silakan pilih kota terlebih dahulu!</p>";
   hasil.innerHTML="<p>🔄 Mengambil data cuaca...</p>";
+  clearEffects();
 
   try{
     const geoRes = await fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${kota},ID&limit=1&appid=${API_KEY}`);
@@ -178,23 +241,23 @@ async function ambilCuaca() {
     const weatherRes = await fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=metric&lang=id&appid=${API_KEY}`);
     const data = await weatherRes.json();
 
-    // Set background berdasarkan cuaca pertama
+    // background & efek
     const kondisi = data.list[0].weather[0].main.toLowerCase();
     switch(kondisi){
-      case"clear":document.body.style.background="linear-gradient(135deg,#38bdf8,#1e3a8a)";break;
-      case"clouds":document.body.style.background="linear-gradient(135deg,#6b7280,#374151)";break;
-      case"rain":document.body.style.background="linear-gradient(135deg,#3b82f6,#1e40af)";break;
-      case"snow":document.body.style.background="linear-gradient(135deg,#e0f2fe,#0284c7)";break;
-      default:document.body.style.background="linear-gradient(135deg,#0f172a,#1e293b)";
+      case"clear": document.body.style.background="linear-gradient(135deg,#38bdf8,#1e3a8a)"; break;
+      case"clouds": document.body.style.background="linear-gradient(135deg,#6b7280,#374151)"; break;
+      case"rain": document.body.style.background="linear-gradient(135deg,#3b82f6,#1e40af)"; createRain(); break;
+      case"snow": document.body.style.background="linear-gradient(135deg,#e0f2fe,#0284c7)"; break;
+      default: document.body.style.background="linear-gradient(135deg,#0f172a,#1e293b)";
     }
 
     const days = {};
     data.list.forEach(item => {
       const date = item.dt_txt.split(" ")[0];
-      if(!days[date]) days[date]=item;
+      if(!days[date]) days[date] = item;
     });
 
-    hasil.innerHTML = `<div class="city-title">${kota}</div>`;
+    hasil.innerHTML = "";
     let count=0;
     for(const tgl in days){
       if(count++>=5) break;
@@ -202,10 +265,15 @@ async function ambilCuaca() {
       const icon=item.weather[0].icon;
       const desc=item.weather[0].description;
       const suhu=item.main.temp.toFixed(1);
+
       hasil.innerHTML+=`
         <div class="card">
+          <div class="city-title">
+            <img src="https://img.icons8.com/ios-filled/50/ffffff/marker.png"/>
+            ${kota}
+          </div>
+          <img src="https://openweathermap.org/img/wn/${icon}@2x.png" alt="${desc}" class="weather-icon"/>
           <h3>${new Date(tgl).toLocaleDateString("id-ID",{weekday:"long",day:"numeric",month:"long"})}</h3>
-          <img src="https://openweathermap.org/img/wn/${icon}@2x.png" alt="${desc}">
           <p>${desc}</p>
           <p>🌡️ ${suhu}°C</p>
         </div>`;
@@ -214,13 +282,6 @@ async function ambilCuaca() {
   }catch(err){
     hasil.innerHTML=`<p>❌ Gagal mengambil data cuaca: ${err.message}</p>`;
   }
-}
-
-// Mode otomatis tema sistem
-if(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches){
-  document.body.style.background="linear-gradient(135deg,#0f172a,#1e293b)";
-}else{
-  document.body.style.background="linear-gradient(135deg,#38bdf8,#1e3a8a)";
 }
 </script>
 
