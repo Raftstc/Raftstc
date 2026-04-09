@@ -1,0 +1,52 @@
+<html>
+<head>
+    <title>Kalkulator Sederhana</title>
+</head>
+<body>
+
+    <h2>Kalkulator Sederhana</h2>
+
+    Angka 1:<br>
+    <input type="number" id="angka1"><br><br>
+
+    Angka 2:<br>
+    <input type="number" id="angka2"><br><br>
+
+    Pilih Operasi:<br>
+    <select id="operasi">
+        <option value="+">+</option>
+        <option value="-">-</option>
+        <option value="*">*</option>
+        <option value="/">/</option>
+    </select><br><br>
+
+    <button onclick="hitung()">Hitung</button>
+
+    <h3>Hasil: <span id="hasil">-</span></h3>
+
+    <script>
+        function hitung() {
+            let a = document.getElementById("angka1").value;
+            let b = document.getElementById("angka2").value;
+            let op = document.getElementById("operasi").value;
+            let hasil;
+
+            a = parseFloat(a);
+            b = parseFloat(b);
+
+            if (op == "+") {
+                hasil = a + b;
+            } else if (op == "-") {
+                hasil = a - b;
+            } else if (op == "*") {
+                hasil = a * b;
+            } else if (op == "/") {
+                hasil = a / b;
+            }
+
+            document.getElementById("hasil").innerText = hasil;
+        }
+    </script>
+
+</body>
+      </html>
